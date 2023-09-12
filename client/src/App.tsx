@@ -1,30 +1,38 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Atelier, AtelierRef } from "@cobaltinc/atelier";
+import ZoomSlider from "./components/ZoomSlider";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const ref = useRef<AtelierRef>(null);
+
+  const [zoom, setZoom] = useState(1);
+  const [width, setWidth] = useState(512);
+  const [height, setHeight] = useState(512);
+
+  function getImageDataURI() {
+    return ref.current?.canvas.toDataURL("image/png");
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          (Vite logo)
-        </a>
-        <a href="https://react.dev" target="_blank">
-          (React logo)
-        </a>
+      <div className="flex h-screen w-full flex-col">
+        <ZoomSlider
+          className="flex-none shadow"
+          initialZoom={1}
+          onChange={setZoom}
+        />
+        {/* canvas container */}
+        <div className="flex flex-1 items-center justify-center overflow-auto bg-neutral-500">
+          <Atelier
+            ref={ref}
+            className="bg-white"
+            width={width * zoom}
+            height={height * zoom}
+            canvasWidth={width}
+            canvasHeight={height}
+          />
+        </div>
       </div>
-      <h1 className="text-red-500">Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }
