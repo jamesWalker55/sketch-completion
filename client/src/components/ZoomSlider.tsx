@@ -1,3 +1,8 @@
+import {
+  ArrowClockwise,
+  MagnifyingGlassMinus,
+  MagnifyingGlassPlus,
+} from "@phosphor-icons/react";
 import { useRef, useState } from "react";
 
 interface Props {
@@ -41,16 +46,24 @@ function ZoomSlider({
 
   return (
     <div className={"flex items-center justify-stretch" + " " + className}>
-      <span className="flex-none">{(zoom * 100).toPrecision(3)}%</span>
+      <div className="w-11 flex-none text-right text-sm font-semibold text-neutral-500">
+        {(zoom * 100).toPrecision(3)}%
+      </div>
       <button
-        className="flex-none p-2 hover:bg-black/10"
+        className="m-0.5 flex-none rounded p-1 hover:bg-black/10"
+        onClick={() => setZoom(initialZoom)}
+      >
+        <ArrowClockwise size={16} />
+      </button>
+      <button
+        className="m-0.5 flex-none rounded p-1 hover:bg-black/10"
         onClick={() => setZoom((zoom) => zoom / zoomMultiplier)}
       >
-        -
+        <MagnifyingGlassMinus size={16} />
       </button>
       <input
         type="range"
-        className="flex-1"
+        className="m-0.5 min-w-0 flex-1 cursor-pointer bg-transparent"
         min={minZoom ** 0.5}
         max={maxZoom ** 0.5}
         step={0.01}
@@ -63,10 +76,10 @@ function ZoomSlider({
         onDoubleClick={() => setZoom(1)}
       />
       <button
-        className="flex-none p-2 hover:bg-black/10"
+        className="m-0.5 flex-none rounded p-1 hover:bg-black/10"
         onClick={() => setZoom((zoom) => zoom * zoomMultiplier)}
       >
-        +
+        <MagnifyingGlassPlus size={16} />
       </button>
     </div>
   );
