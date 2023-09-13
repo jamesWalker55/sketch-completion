@@ -1,8 +1,14 @@
-import { Atelier, AtelierRef } from "@cobaltinc/atelier";
+import {
+  Atelier,
+  AtelierRef,
+  EraserPlugin,
+  PenPlugin,
+} from "@cobaltinc/atelier";
+import { Download } from "@phosphor-icons/react";
 import { useRef, useState } from "react";
 import CanvasSize from "./components/CanvasSize";
+import ToolSwitcher from "./components/ToolSwitcher";
 import ZoomSlider from "./components/ZoomSlider";
-import { Download } from "@phosphor-icons/react";
 
 function App() {
   const ref = useRef<AtelierRef>(null);
@@ -10,9 +16,10 @@ function App() {
   const [zoom, setZoom] = useState(1);
   const [width, setWidth] = useState(512);
   const [height, setHeight] = useState(512);
+  const [command, setCommand] = useState("pen");
+  const [lineWidth, setLineWidth] = useState(2);
 
   function setSize(width: number, height: number) {
-    ref.current?.canvas;
     setWidth(width);
     setHeight(height);
   }
@@ -31,6 +38,13 @@ function App() {
       <div className="flex h-screen w-full flex-col">
         {/* toolbar */}
         <div className="z-10 flex flex-none items-center shadow">
+          <ToolSwitcher
+            onChange={(command, width) => {
+              setCommand(command);
+              setLineWidth(width);
+            }}
+          />
+          <span className="mx-3 h-4 w-0.5 bg-neutral-200"></span>
           <CanvasSize
             initialHeight={512}
             initialWidth={512}
@@ -69,6 +83,9 @@ function App() {
             canvasWidth={width}
             canvasHeight={height}
             key={`${width}x${height}`}
+            command={command}
+            plugins={[PenPlugin, EraserPlugin]}
+            lineWidth={lineWidth}
           />
         </div>
       </div>
