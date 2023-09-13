@@ -17,7 +17,12 @@ function App() {
   }
 
   function getImageDataURI() {
-    return ref.current?.canvas.toDataURL("image/png");
+    const atelier = ref.current;
+    if (atelier === null) {
+      throw { message: "attempted to get image when canvas isn't initialised" };
+    }
+
+    return atelier.canvas.toDataURL("image/png");
   }
 
   return (
