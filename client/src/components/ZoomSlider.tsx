@@ -3,7 +3,7 @@ import {
   MagnifyingGlassMinus,
   MagnifyingGlassPlus,
 } from "@phosphor-icons/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   minZoom?: number;
