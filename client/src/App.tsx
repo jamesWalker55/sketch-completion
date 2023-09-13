@@ -6,6 +6,7 @@ import {
 } from "@cobaltinc/atelier";
 import { Download } from "@phosphor-icons/react";
 import { useRef, useState } from "react";
+import BrushHint from "./components/BrushHint";
 import CanvasSize from "./components/CanvasSize";
 import ToolSwitcher from "./components/ToolSwitcher";
 import ZoomSlider from "./components/ZoomSlider";
@@ -88,6 +89,7 @@ function App() {
             lineWidth={lineWidth}
           />
         </div>
+        <BrushHint lineWidth={lineWidth} zoom={zoom} />
       </div>
     </>
   );

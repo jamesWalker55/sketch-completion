@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  /* required for BrushHint, prevents scrollbars from appearing when mouse is at edge of screen */
+  overflow: hidden;
+}
