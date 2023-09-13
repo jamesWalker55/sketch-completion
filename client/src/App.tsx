@@ -4,8 +4,8 @@ import {
   EraserPlugin,
   PenPlugin,
 } from "@cobaltinc/atelier";
-import { Download } from "@phosphor-icons/react";
-import { useRef, useState } from "react";
+import { ArrowUUpLeft, ArrowUUpRight, Download } from "@phosphor-icons/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import BrushHint from "./components/BrushHint";
 import CanvasSize from "./components/CanvasSize";
 import ToolSwitcher from "./components/ToolSwitcher";
@@ -34,6 +34,20 @@ function App() {
     return atelier.canvas.toDataURL("image/png");
   }
 
+  const shortcutHandler = useCallback((event: KeyboardEvent) => {
+    if (event.repeat) return;
+
+    if (event.ctrlKey && !event.shiftKey && event.key === "z") {
+      ref.current?.undo();
+    } else if (event.ctrlKey && event.shiftKey && event.key === "Z") {
+      ref.current?.redo();
+    }
+  }, []);
+  useEffect(() => {
+    document.addEventListener("keydown", shortcutHandler);
+    return () => document.removeEventListener("keydown", shortcutHandler);
+  }, [shortcutHandler]);
+
   return (
     <>
       <div className="flex h-screen w-full flex-col">
@@ -53,6 +67,21 @@ function App() {
             }}
             className="flex-none"
           />
+          <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
+          <div className="flex flex-none items-center justify-stretch">
+            <button
+              className="m-0.5 flex-none rounded p-1 hover:bg-black/10"
+              onClick={() => ref.current?.undo()}
+            >
+              <ArrowUUpLeft size={16} />
+            </button>
+            <button
+              className="m-0.5 flex-none rounded p-1 hover:bg-black/10"
+              onClick={() => ref.current?.redo()}
+            >
+              <ArrowUUpRight size={16} />
+            </button>
+          </div>
           <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <ZoomSlider
             initialZoom={1}
