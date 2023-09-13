@@ -1,5 +1,6 @@
 import BrushHint from "@/components/BrushHint";
 import CanvasSize from "@/components/CanvasSize";
+import PromptInput from "@/components/PromptInput";
 import ToolSwitcher from "@/components/ToolSwitcher";
 import ZoomSlider from "@/components/ZoomSlider";
 import {
@@ -19,6 +20,8 @@ function App() {
   const [height, setHeight] = useState(512);
   const [command, setCommand] = useState("pen");
   const [lineWidth, setLineWidth] = useState(2);
+  const [prompt, setPrompt] = useState("A drawing of a cute cat");
+  const [negPrompt, setNegPrompt] = useState("A bad drawing");
 
   function setSize(width: number, height: number) {
     setWidth(width);
@@ -124,6 +127,15 @@ function App() {
           />
         </div>
         <BrushHint lineWidth={lineWidth} zoom={zoom} />
+        <PromptInput
+          className="z-10"
+          initialPrompt={prompt}
+          initialNegativePrompt={negPrompt}
+          onChange={(newPrompt, newNegPrompt) => {
+            setPrompt(newPrompt);
+            setNegPrompt(newNegPrompt);
+          }}
+        />
       </div>
     </>
   );
