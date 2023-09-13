@@ -2,6 +2,7 @@ import { Atelier, AtelierRef } from "@cobaltinc/atelier";
 import { useRef, useState } from "react";
 import CanvasSize from "./components/CanvasSize";
 import ZoomSlider from "./components/ZoomSlider";
+import { Download } from "@phosphor-icons/react";
 
 function App() {
   const ref = useRef<AtelierRef>(null);
@@ -38,6 +39,25 @@ function App() {
           />
           <span className="mx-3 h-4 w-0.5 bg-neutral-200"></span>
           <ZoomSlider initialZoom={1} onChange={setZoom} className="w-56" />
+          <span className="mx-2 h-4 w-0.5 bg-neutral-200"></span>
+          <button
+            className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
+            onClick={() => {
+              const img = getImageDataURI();
+
+              const anchor = document.createElement("a");
+              anchor.setAttribute("download", "sketch.png");
+              anchor.setAttribute(
+                "href",
+                img.replace("image/png", "image/octet-stream"),
+              );
+
+              anchor.click();
+            }}
+          >
+            Download
+            <Download size={16} />
+          </button>
         </div>
         {/* canvas container */}
         <div className="flex flex-1 items-center justify-center overflow-auto bg-neutral-500">
