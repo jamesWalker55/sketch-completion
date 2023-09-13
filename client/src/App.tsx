@@ -60,10 +60,10 @@ function App() {
           </button>
         </div>
         {/* canvas container */}
-        <div className="flex flex-1 items-center justify-center overflow-auto bg-neutral-500">
+        <div className="flex flex-1 overflow-auto bg-neutral-500">
           <Atelier
             ref={ref}
-            className="bg-white"
+            className="m-auto bg-white"
             width={width * zoom}
             height={height * zoom}
             canvasWidth={width}
