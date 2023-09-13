@@ -38,23 +38,28 @@ function App() {
     <>
       <div className="flex h-screen w-full flex-col">
         {/* toolbar */}
-        <div className="z-10 flex flex-none items-center shadow">
+        <div className="z-10 flex flex-none items-center justify-start overflow-x-auto px-2 shadow">
+          <CanvasSize
+            initialHeight={512}
+            initialWidth={512}
+            onChange={setSize}
+            className="w-44 flex-none"
+          />
+          <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <ToolSwitcher
             onChange={(command, width) => {
               setCommand(command);
               setLineWidth(width);
             }}
+            className="flex-none"
           />
-          <span className="mx-3 h-4 w-0.5 bg-neutral-200"></span>
-          <CanvasSize
-            initialHeight={512}
-            initialWidth={512}
-            onChange={setSize}
-            className="w-44"
+          <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
+          <ZoomSlider
+            initialZoom={1}
+            onChange={setZoom}
+            className="w-56 flex-none"
           />
-          <span className="mx-3 h-4 w-0.5 bg-neutral-200"></span>
-          <ZoomSlider initialZoom={1} onChange={setZoom} className="w-56" />
-          <span className="mx-2 h-4 w-0.5 bg-neutral-200"></span>
+          <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <button
             className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
             onClick={() => {
