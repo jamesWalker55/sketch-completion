@@ -36,7 +36,7 @@ function App() {
             onChange={setSize}
             className="w-44"
           />
-          <span className="mx-3 h-4 w-px bg-neutral-400"></span>
+          <span className="mx-3 h-4 w-0.5 bg-neutral-200"></span>
           <ZoomSlider initialZoom={1} onChange={setZoom} className="w-56" />
         </div>
         {/* canvas container */}
