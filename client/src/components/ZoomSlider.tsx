@@ -46,8 +46,8 @@ function ZoomSlider({
 
   return (
     <div className={"flex items-center justify-stretch" + " " + className}>
-      <div className="w-11 flex-none text-right text-sm font-semibold text-neutral-500">
-        {(zoom * 100).toPrecision(3)}%
+      <div className="w-10 flex-none text-center text-sm font-semibold text-neutral-500">
+        {Math.round(zoom * 100)}%
       </div>
       <button
         className="m-0.5 flex-none rounded p-1 hover:bg-black/10"
