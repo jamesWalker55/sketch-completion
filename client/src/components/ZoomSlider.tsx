@@ -1,3 +1,4 @@
+import { setStateWithCallback } from "@/lib/util";
 import {
   ArrowClockwise,
   MagnifyingGlassMinus,
@@ -22,25 +23,12 @@ function ZoomSlider({
 }: Props) {
   const [zoom, setRawZoom] = useState(initialZoom);
 
-  function setZoom(callback: number | ((zoom: number) => number)) {
-    let newZoom;
-
-    // calculate new zoom
-    if (typeof callback === "number") {
-      newZoom = callback;
-    } else {
-      newZoom = callback(zoom);
-    }
-
-    // clamp between min and max zoom
-    newZoom = Math.max(minZoom, Math.min(newZoom, maxZoom));
-
-    // update zoom
-    setRawZoom(newZoom);
-
-    // do callback
-    if (onChange !== undefined) onChange(newZoom);
-  }
+  const setZoom = setStateWithCallback(
+    zoom,
+    setRawZoom,
+    onChange,
+    (newWidth: number) => Math.max(minZoom, Math.min(newWidth, maxZoom)),
+  );
 
   const zoomMultiplier = 1.1;
 

@@ -1,3 +1,4 @@
+import { setStateWithCallback } from "@/lib/util";
 import { ArrowsHorizontal, ArrowsVertical } from "@phosphor-icons/react";
 import { useState } from "react";
 
@@ -23,31 +24,19 @@ function CanvasSize({
   const [width, setRawWidth] = useState(initialWidth);
   const [height, setRawHeight] = useState(initialHeight);
 
-  function setWidth(callback: number | ((zoom: number) => number)) {
-    let newValue;
-    if (typeof callback === "number") {
-      newValue = callback;
-    } else {
-      newValue = callback(width);
-    }
-    newValue = Math.max(min, Math.min(newValue, max));
+  const setWidth = setStateWithCallback(
+    width,
+    setRawWidth,
+    onChange ? (newWidth: number) => onChange(newWidth, height) : undefined,
+    (newWidth: number) => Math.max(min, Math.min(newWidth, max)),
+  );
 
-    setRawWidth(newValue);
-    if (onChange !== undefined) onChange(newValue, height);
-  }
-
-  function setHeight(callback: number | ((zoom: number) => number)) {
-    let newValue;
-    if (typeof callback === "number") {
-      newValue = callback;
-    } else {
-      newValue = callback(height);
-    }
-    newValue = Math.max(min, Math.min(newValue, max));
-
-    setRawHeight(newValue);
-    if (onChange !== undefined) onChange(width, newValue);
-  }
+  const setHeight = setStateWithCallback(
+    height,
+    setRawHeight,
+    onChange ? (newHeight: number) => onChange(width, newHeight) : undefined,
+    (newHeight: number) => Math.max(min, Math.min(newHeight, max)),
+  );
 
   return (
     <div className={"flex items-center justify-stretch" + " " + className}>
