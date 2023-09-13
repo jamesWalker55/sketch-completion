@@ -1,3 +1,7 @@
+import BrushHint from "@/components/BrushHint";
+import CanvasSize from "@/components/CanvasSize";
+import ToolSwitcher from "@/components/ToolSwitcher";
+import ZoomSlider from "@/components/ZoomSlider";
 import {
   Atelier,
   AtelierRef,
@@ -6,10 +10,6 @@ import {
 } from "@cobaltinc/atelier";
 import { ArrowUUpLeft, ArrowUUpRight, Download } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import BrushHint from "./components/BrushHint";
-import CanvasSize from "./components/CanvasSize";
-import ToolSwitcher from "./components/ToolSwitcher";
-import ZoomSlider from "./components/ZoomSlider";
 
 function App() {
   const ref = useRef<AtelierRef>(null);
