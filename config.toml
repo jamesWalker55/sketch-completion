@@ -1,0 +1,3 @@
+[server]
+stable_diffusion = 'D:\stable-diffusion\lib\models\furnace50_furnace50-fixed_vae-2181-2982-0004.safetensors'
+controlnet = 'D:\stable-diffusion\lib\controlnet\sketch-a-sketch'

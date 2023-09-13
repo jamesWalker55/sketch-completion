@@ -10,18 +10,18 @@ from .config import config
 
 device = torch.device("cuda")
 
-config["Server"]["StableDiffusion"]
-config["Server"]["ControlNet"]
+config["server"]["stable_diffusion"]
+config["server"]["controlnet"]
 
 
 controlnet = ControlNetModel.from_pretrained(
-    config["Server"]["ControlNet"],
+    config["server"]["controlnet"],
     torch_dtype=torch.float16,
 ).to(device)
 
 pipe = StableDiffusionControlNetPipeline.from_single_file(
-    config["Server"]["StableDiffusion"],
-    use_safetensors=config["Server"]["StableDiffusion"]
+    config["server"]["stable_diffusion"],
+    use_safetensors=config["server"]["stable_diffusion"]
     .lower()
     .endswith(".safetensors"),
     controlnet=controlnet,
