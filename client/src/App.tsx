@@ -139,10 +139,17 @@ function App() {
           </button>
         </div>
         {/* canvas container */}
-        <div className="flex flex-1 overflow-auto bg-neutral-500">
+        <div className="grid flex-1 overflow-auto bg-neutral-500">
+          <HintDisplay
+            images={[]}
+            width={width * zoom}
+            height={height * zoom}
+            opacity={hintOpacity}
+            className="col-start-1 row-start-1 m-auto"
+          />
           <Atelier
             ref={ref}
-            className="m-auto bg-white"
+            className="col-start-1 row-start-1 m-auto bg-white"
             width={width * zoom}
             height={height * zoom}
             canvasWidth={width}
