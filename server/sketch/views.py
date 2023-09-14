@@ -3,6 +3,7 @@ import json
 from io import BytesIO
 
 from django.http import HttpRequest, HttpResponse
+from lib import inference
 from PIL import Image
 
 
@@ -44,10 +45,6 @@ def process(request: HttpRequest):
     except json.JSONDecodeError as e:
         return HttpResponse(f"Invalid JSON body. {e}", status=400)
 
-    # body["image_uri"]
-    # body["prompt"]
-    # body["negative_prompt"]
-
     img = parse_image_uri(body["image_uri"])
     img = Image.alpha_composite(
         Image.new("RGBA", img.size, (255, 255, 255)),
@@ -55,6 +52,8 @@ def process(request: HttpRequest):
     )
     img = img.convert("RGB")
 
-    img_bytes = image_to_bytes(img, format="jpeg", quality=90)
+    out_img = inference.execute_threadsafe(img, body["prompt"], body["negative_prompt"])
 
-    return HttpResponse(img_bytes, content_type="image/jpeg")
+    out_img_bytes = image_to_bytes(out_img, format="jpeg", quality=90)
+
+    return HttpResponse(out_img_bytes, content_type="image/jpeg")

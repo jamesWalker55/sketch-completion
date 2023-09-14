@@ -1,3 +1,5 @@
+import threading
+
 import torch
 from diffusers import (
     ControlNetModel,
@@ -9,9 +11,6 @@ from PIL import Image
 from .config import config
 
 device = torch.device("cuda")
-
-config["server"]["stable_diffusion"]
-config["server"]["controlnet"]
 
 
 controlnet = ControlNetModel.from_pretrained(
@@ -49,3 +48,23 @@ def execute(
     )
     img = res.images[0]
     return img
+
+
+execute_lock = threading.Lock()
+
+
+def execute_threadsafe(
+    hint: Image.Image,
+    pos_prompt: str,
+    neg_prompt: str,
+    steps: int = 20,
+    controlnet_strength: float = 1.0,
+):
+    with execute_lock:
+        return execute(
+            hint,
+            pos_prompt,
+            neg_prompt,
+            steps=steps,
+            controlnet_strength=controlnet_strength,
+        )
