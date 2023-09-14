@@ -29,11 +29,16 @@ export function setStateWithCallback<T>(
 }
 
 export async function imageBlobToBase64(blob: Blob) {
-  return new Promise((onSuccess, onError) => {
+  return new Promise((onSuccess: (value: string) => void, onError) => {
     try {
       const reader = new FileReader();
       reader.onload = function () {
-        onSuccess(this.result);
+        const result = this.result;
+        if (typeof result === "string") {
+          onSuccess(result);
+        } else {
+          onError(["invalid result", result]);
+        }
       };
       reader.readAsDataURL(blob);
     } catch (e) {

@@ -21,6 +21,12 @@ import {
 } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+enum ClientState {
+  IDLE,
+  BUSY,
+  WAITING_COMPLETION,
+}
+
 function App() {
   const ref = useRef<AtelierRef>(null);
 
@@ -32,6 +38,21 @@ function App() {
   const [prompt, setPrompt] = useState("A drawing of a cute cat");
   const [negPrompt, setNegPrompt] = useState("A bad drawing");
   const [hintOpacity, setHintOpacity] = useState(1.0);
+  const [clientState, setClientState] = useState(ClientState.IDLE);
+  const [hints, setHints] = useState<string[]>([]);
+  // refs for use in async request loop
+  const requestLoopRef = useRef({
+    clientState: clientState,
+    prompt: prompt,
+    negPrompt: negPrompt,
+  });
+  useEffect(() => {
+    requestLoopRef.current = {
+      clientState: clientState,
+      prompt: prompt,
+      negPrompt: negPrompt,
+    };
+  }, [clientState, prompt, negPrompt]);
 
   function setSize(width: number, height: number) {
     setWidth(width);
@@ -68,11 +89,75 @@ function App() {
     return () => document.removeEventListener("keydown", shortcutHandler);
   }, [shortcutHandler]);
 
+  async function startRequests() {
+    if (requestLoopRef.current.clientState !== ClientState.IDLE)
+      throw "Can only start requests when idle";
+
+    setClientState(ClientState.BUSY);
+
+    while (
+      requestLoopRef.current.clientState !== ClientState.WAITING_COMPLETION
+    ) {
+      let blob: Blob;
+      try {
+        blob = await process(
+          getImageDataURI(),
+          requestLoopRef.current.prompt,
+          requestLoopRef.current.negPrompt,
+        );
+      } catch (e) {
+        console.error("Error when processing image:");
+        console.error(e);
+        setClientState(ClientState.IDLE);
+        return;
+      }
+
+      const img = await imageBlobToBase64(blob);
+
+      setHints((oldHints) => {
+        const newHints = [...oldHints, img];
+        if (newHints.length > 5) {
+          newHints.splice(0, 1);
+        }
+        return newHints;
+      });
+    }
+
+    setClientState(ClientState.IDLE);
+  }
+
+  async function stopRequests() {
+    if (requestLoopRef.current.clientState !== ClientState.BUSY)
+      throw "Can only stop requests when busy";
+
+    setClientState(ClientState.WAITING_COMPLETION);
+  }
+
   return (
     <>
       <div className="flex h-screen w-full flex-col">
         {/* toolbar */}
         <div className="z-10 flex flex-none items-center justify-start overflow-x-auto px-2 shadow">
+          <div
+            className="flex-none"
+            onClick={() => {
+              if (clientState === ClientState.IDLE) {
+                console.log("starting requests");
+                startRequests();
+              } else if (clientState === ClientState.BUSY) {
+                console.log("stopping requests");
+                stopRequests();
+              }
+            }}
+          >
+            TEST:{" "}
+            {clientState === ClientState.IDLE
+              ? "IDLE"
+              : clientState === ClientState.BUSY
+              ? "BUSY"
+              : "WAITING"}
+          </div>
+          <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <CanvasSize
             initialHeight={512}
             initialWidth={512}
@@ -141,7 +226,7 @@ function App() {
         {/* canvas container */}
         <div className="grid flex-1 overflow-auto bg-neutral-500">
           <HintDisplay
-            images={[]}
+            images={hints}
             width={width * zoom}
             height={height * zoom}
             opacity={hintOpacity}

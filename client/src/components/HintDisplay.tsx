@@ -14,7 +14,6 @@ function HintDisplay({
   opacity = 1,
   className = "",
 }: Props) {
-  images = ["/fake.jpg", "/process.jpg"];
   return (
     <div
       className={"pointer-events-none grid" + ` ${className}`}
@@ -25,6 +24,7 @@ function HintDisplay({
           className="col-start-1 row-start-1 h-full w-full mix-blend-multiply"
           style={{ opacity: opacity }}
           src={uri}
+          key={uri}
         />
       ))}
     </div>
