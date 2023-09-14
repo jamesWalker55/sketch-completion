@@ -1,17 +1,19 @@
 import { setStateWithCallback } from "@/lib/util";
-import { CaretDown, CaretRight } from "@phosphor-icons/react";
+import { CaretDown, CaretRight, Eye } from "@phosphor-icons/react";
 import { useState } from "react";
 
 interface Props {
   initialPrompt?: string;
   initialNegativePrompt?: string;
-  onChange?(prompt: string, negativePrompt: string): void;
+  initialOpacity?: number;
+  onChange?(prompt: string, negativePrompt: string, opacity: number): void;
   className?: string;
 }
 
 function PromptInput({
   initialPrompt = "",
   initialNegativePrompt = "",
+  initialOpacity = 1,
   className = "",
   onChange,
 }: Props) {
@@ -19,17 +21,30 @@ function PromptInput({
   const [negativePrompt, setRawNegativePrompt] = useState(
     initialNegativePrompt,
   );
+  const [opacity, setRawOpacity] = useState(initialOpacity);
 
   const setPrompt = setStateWithCallback(
     prompt,
     setRawPrompt,
-    onChange ? (newPrompt) => onChange(newPrompt, negativePrompt) : undefined,
+    onChange
+      ? (newPrompt) => onChange(newPrompt, negativePrompt, opacity)
+      : undefined,
   );
 
   const setNegativePrompt = setStateWithCallback(
     negativePrompt,
     setRawNegativePrompt,
-    onChange ? (newNegPrompt) => onChange(prompt, newNegPrompt) : undefined,
+    onChange
+      ? (newNegPrompt) => onChange(prompt, newNegPrompt, opacity)
+      : undefined,
+  );
+
+  const setOpacity = setStateWithCallback(
+    opacity,
+    setRawOpacity,
+    onChange
+      ? (newOpacity) => onChange(prompt, negativePrompt, newOpacity)
+      : undefined,
   );
 
   const [collapsed, setCollapsed] = useState(false);
@@ -42,7 +57,7 @@ function PromptInput({
         className
       }
     >
-      <div className="flex gap-1">
+      <div className="flex items-center justify-center gap-1">
         <div
           className="cursor-pointer rounded hover:bg-neutral-200"
           onClick={() => setCollapsed(!collapsed)}
@@ -50,6 +65,20 @@ function PromptInput({
           {collapsed ? <CaretRight size={24} /> : <CaretDown size={24} />}
         </div>
         <span className="italic text-neutral-500">Prompt</span>
+        <span className="flex-1"></span>
+        {/* opacity slider */}
+        <div className="flex items-center justify-center gap-1">
+          <Eye size={16} />
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            className="w-32"
+            value={opacity}
+            onChange={(e) => setOpacity(parseFloat(e.target.value))}
+          />
+        </div>
       </div>
 
       {!collapsed ? (

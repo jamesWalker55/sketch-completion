@@ -1,5 +1,6 @@
 import BrushHint from "@/components/BrushHint";
 import CanvasSize from "@/components/CanvasSize";
+import HintDisplay from "@/components/HintDisplay";
 import PromptInput from "@/components/PromptInput";
 import ToolSwitcher from "@/components/ToolSwitcher";
 import ZoomSlider from "@/components/ZoomSlider";
@@ -30,6 +31,7 @@ function App() {
   const [lineWidth, setLineWidth] = useState(2);
   const [prompt, setPrompt] = useState("A drawing of a cute cat");
   const [negPrompt, setNegPrompt] = useState("A bad drawing");
+  const [hintOpacity, setHintOpacity] = useState(1.0);
 
   function setSize(width: number, height: number) {
     setWidth(width);
@@ -156,9 +158,11 @@ function App() {
           className="z-10"
           initialPrompt={prompt}
           initialNegativePrompt={negPrompt}
-          onChange={(newPrompt, newNegPrompt) => {
+          initialOpacity={hintOpacity}
+          onChange={(newPrompt, newNegPrompt, newOpacity) => {
             setPrompt(newPrompt);
             setNegPrompt(newNegPrompt);
+            setHintOpacity(newOpacity);
           }}
         />
       </div>
