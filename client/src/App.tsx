@@ -16,6 +16,7 @@ import {
   ArrowUUpRight,
   Cpu,
   Download,
+  Eye,
 } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -42,6 +43,13 @@ function App() {
     }
 
     return atelier.canvas.toDataURL("image/png");
+  }
+
+  function downloadImageURI(img: string) {
+    const anchor = document.createElement("a");
+    anchor.setAttribute("download", "sketch.png");
+    anchor.setAttribute("href", img.replace("image/png", "image/octet-stream"));
+    anchor.click();
   }
 
   const shortcutHandler = useCallback((event: KeyboardEvent) => {
@@ -115,21 +123,17 @@ function App() {
           <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <button
             className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
-            onClick={() => {
-              const img = getImageDataURI();
-
-              const anchor = document.createElement("a");
-              anchor.setAttribute("download", "sketch.png");
-              anchor.setAttribute(
-                "href",
-                img.replace("image/png", "image/octet-stream"),
-              );
-
-              anchor.click();
-            }}
+            onClick={() => downloadImageURI(getImageDataURI())}
           >
             Download
             <Download size={16} />
+          </button>
+          <button
+            className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
+            onClick={() => window.open(getImageDataURI(), "_blank")}
+          >
+            View
+            <Eye size={16} />
           </button>
         </div>
         {/* canvas container */}
