@@ -8,16 +8,18 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
 
-  define: {
-    __API_HOST__: (() => {
-      const configPath = path.resolve(__dirname, "../config.toml");
-      const config = parse(fs.readFileSync(configPath, "utf8"));
-      const apiHost = config["client"]["host"];
-      if (typeof apiHost !== "string")
-        throw `failed to get API host from config.client.host: ${apiHost}`;
+  server: {
+    proxy: {
+      "/api": (() => {
+        const configPath = path.resolve(__dirname, "../config.toml");
+        const config = parse(fs.readFileSync(configPath, "utf8"));
+        const apiHost = config["client"]["api_host"];
+        if (typeof apiHost !== "string")
+          throw `failed to get API host from config.client.api_host: ${apiHost}`;
 
-      return JSON.stringify(apiHost);
-    })(),
+        return apiHost;
+      })(),
+    },
   },
 
   resolve: {

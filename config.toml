@@ -3,4 +3,4 @@ stable_diffusion = 'D:\stable-diffusion\lib\models\furnace50_furnace50-fixed_vae
 controlnet = 'D:\stable-diffusion\lib\controlnet\sketch-a-sketch'
 
 [client]
-host = 'http://localhost:8000'
+api_host = 'http://localhost:8000'
