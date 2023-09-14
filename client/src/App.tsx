@@ -207,27 +207,6 @@ function App() {
           <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <button
             className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
-            onClick={async () => {
-              const img = getImageDataURI();
-
-              const blob = await process(img, prompt, negPrompt);
-              const uri = await imageBlobToBase64(blob);
-              console.log(uri);
-            }}
-          >
-            Process
-            <Cpu size={16} />
-          </button>
-          <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
-          <button
-            className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
-            onClick={() => downloadImageURI(getImageDataURI())}
-          >
-            Download
-            <Download size={16} />
-          </button>
-          <button
-            className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
             onClick={() => window.open(getImageDataURI(), "_blank")}
           >
             View
