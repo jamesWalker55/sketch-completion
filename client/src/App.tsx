@@ -169,13 +169,6 @@ function App() {
             )}
           </div>
           <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
-          <CanvasSize
-            initialHeight={512}
-            initialWidth={512}
-            onChange={setSize}
-            className="w-44 flex-none"
-          />
-          <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <ToolSwitcher
             onChange={(command, width) => {
               setCommand(command);
