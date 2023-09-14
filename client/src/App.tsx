@@ -3,13 +3,19 @@ import CanvasSize from "@/components/CanvasSize";
 import PromptInput from "@/components/PromptInput";
 import ToolSwitcher from "@/components/ToolSwitcher";
 import ZoomSlider from "@/components/ZoomSlider";
+import { process } from "@/lib/api";
 import {
   Atelier,
   AtelierRef,
   EraserPlugin,
   PenPlugin,
 } from "@cobaltinc/atelier";
-import { ArrowUUpLeft, ArrowUUpRight, Download } from "@phosphor-icons/react";
+import {
+  ArrowUUpLeft,
+  ArrowUUpRight,
+  Cpu,
+  Download,
+} from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 function App() {
@@ -91,6 +97,18 @@ function App() {
             onChange={setZoom}
             className="w-56 flex-none"
           />
+          <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
+          <button
+            className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
+            onClick={async () => {
+              const img = getImageDataURI();
+
+              process(img, prompt, negPrompt);
+            }}
+          >
+            Process
+            <Cpu size={16} />
+          </button>
           <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <button
             className="m-0.5 flex flex-none items-center gap-2 rounded p-1 px-2 hover:bg-black/10"
