@@ -16,8 +16,11 @@ import {
   ArrowUUpLeft,
   ArrowUUpRight,
   Cpu,
+  DotsThree,
   Download,
   Eye,
+  Pause,
+  Play,
 } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -139,7 +142,7 @@ function App() {
         {/* toolbar */}
         <div className="z-10 flex flex-none items-center justify-start overflow-x-auto px-2 shadow">
           <div
-            className="flex-none"
+            className="flex flex-none items-center justify-center rounded pr-2 hover:bg-neutral-300"
             onClick={() => {
               if (clientState === ClientState.IDLE) {
                 console.log("starting requests");
@@ -150,12 +153,20 @@ function App() {
               }
             }}
           >
-            TEST:{" "}
-            {clientState === ClientState.IDLE
-              ? "IDLE"
-              : clientState === ClientState.BUSY
-              ? "BUSY"
-              : "WAITING"}
+            <span className="flex w-14 flex-1 items-center justify-center">
+              {clientState === ClientState.IDLE
+                ? "Start"
+                : clientState === ClientState.BUSY
+                ? "Pause"
+                : "Pausing"}
+            </span>
+            {clientState === ClientState.IDLE ? (
+              <Play size={16} />
+            ) : clientState === ClientState.BUSY ? (
+              <Pause size={16} />
+            ) : (
+              <DotsThree size={16} />
+            )}
           </div>
           <span className="mx-3 h-6 w-0.5 flex-none bg-neutral-100"></span>
           <CanvasSize
