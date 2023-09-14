@@ -4,6 +4,7 @@ import PromptInput from "@/components/PromptInput";
 import ToolSwitcher from "@/components/ToolSwitcher";
 import ZoomSlider from "@/components/ZoomSlider";
 import { process } from "@/lib/api";
+import { imageBlobToBase64 } from "@/lib/util";
 import {
   Atelier,
   AtelierRef,
@@ -103,7 +104,9 @@ function App() {
             onClick={async () => {
               const img = getImageDataURI();
 
-              process(img, prompt, negPrompt);
+              const blob = await process(img, prompt, negPrompt);
+              const uri = await imageBlobToBase64(blob);
+              console.log(uri);
             }}
           >
             Process

@@ -15,6 +15,7 @@ export async function process(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
+  if (!res.ok) throw res;
 
-  return res;
+  return await res.blob();
 }

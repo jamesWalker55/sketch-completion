@@ -27,3 +27,17 @@ export function setStateWithCallback<T>(
 
   return func;
 }
+
+export async function imageBlobToBase64(blob: Blob) {
+  return new Promise((onSuccess, onError) => {
+    try {
+      const reader = new FileReader();
+      reader.onload = function () {
+        onSuccess(this.result);
+      };
+      reader.readAsDataURL(blob);
+    } catch (e) {
+      onError(e);
+    }
+  });
+}
