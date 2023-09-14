@@ -5,6 +5,7 @@ from io import BytesIO
 from django.http import HttpRequest, HttpResponse
 from lib import inference
 from PIL import Image
+import PIL.ImageOps
 
 
 def image_to_bytes(img: Image.Image, *, format: str = None, **kwargs):
@@ -53,7 +54,9 @@ def process(request: HttpRequest):
     img = img.convert("RGB")
 
     out_img = inference.execute_threadsafe(img, body["prompt"], body["negative_prompt"])
+    out_hed = inference.detect_hed_threadsafe(out_img)
+    out_hed = PIL.ImageOps.invert(out_hed)
 
-    out_img_bytes = image_to_bytes(out_img, format="jpeg", quality=90)
+    out_bytes = image_to_bytes(out_hed, format="jpeg", quality=90)
 
-    return HttpResponse(out_img_bytes, content_type="image/jpeg")
+    return HttpResponse(out_bytes, content_type="image/jpeg")

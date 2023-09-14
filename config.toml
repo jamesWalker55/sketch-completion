@@ -1,6 +1,7 @@
 [server]
 stable_diffusion = 'D:\stable-diffusion\lib\models\furnace50_furnace50-fixed_vae-2181-2982-0004.safetensors'
 controlnet = 'D:\stable-diffusion\lib\controlnet\sketch-a-sketch'
+hed = 'D:\stable-diffusion\webui\extensions\sd-webui-controlnet\annotator\downloads\hed'
 
 [client]
 api_host = 'http://localhost:8000'

@@ -1,6 +1,7 @@
 import threading
 
 import torch
+from controlnet_aux.processor import HEDdetector
 from diffusers import (
     ControlNetModel,
     DPMSolverMultistepScheduler,
@@ -31,6 +32,8 @@ pipe.scheduler = DPMSolverMultistepScheduler.from_config(
     pipe.scheduler.config, use_karras_sigmas=True
 )
 
+hed_detector = HEDdetector.from_pretrained(config["server"]["hed"])
+
 
 def execute(
     hint: Image.Image,
@@ -48,6 +51,10 @@ def execute(
     )
     img = res.images[0]
     return img
+
+
+def detect_hed(img: Image.Image):
+    return hed_detector(img, scribble=False)
 
 
 execute_lock = threading.Lock()
@@ -68,3 +75,8 @@ def execute_threadsafe(
             steps=steps,
             controlnet_strength=controlnet_strength,
         )
+
+
+def detect_hed_threadsafe(img: Image.Image):
+    with execute_lock:
+        return detect_hed(img)
