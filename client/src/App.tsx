@@ -119,7 +119,7 @@ function App() {
 
       setHints((oldHints) => {
         const newHints = [...oldHints, img];
-        if (newHints.length > 5) {
+        if (newHints.length > 2) {
           newHints.splice(0, 1);
         }
         return newHints;
